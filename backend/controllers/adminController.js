@@ -47,7 +47,7 @@ exports.getAnalytics = async (req, res) => {
       Complaint.countDocuments({ status: 'Rejected' }),
     ]);
 
-    const totalUsers = await User.countDocuments({ role: 'user' });
+    const totalUsers = await User.countDocuments({ role: { $in: ['user', 'admin'] } });
 
     // Complaints by category
     const byCategory = await Complaint.aggregate([
