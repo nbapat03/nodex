@@ -37,8 +37,11 @@ export default function Register() {
       <div className="hidden lg:flex w-1/2 flex-col justify-center px-20 bg-gradient-to-br from-green-50 to-white border-r border-green-100 relative z-10">
 
         <div className="flex items-center gap-4 mb-12">
-          <img src="/nodex-logo.png" alt="NodeX" className="w-14 animate-float" />
-          <h1 className="text-3xl font-bold text-green-700">NodeX</h1>
+          <img
+            src="/logo.png"
+            alt="NodeX"
+            className="w-60 animate-float"
+          />
         </div>
 
         <h2 className="text-4xl font-bold text-gray-900 mb-10">

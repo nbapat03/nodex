@@ -7,7 +7,7 @@ import {
 
 const Logo = () => (
   <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-    <img src="/nodex-logo.png" className="w-9 h-9" />
+    <img src="/fevicon.png" className="w-9 h-9" />
 
     <div>
       <span className="font-bold text-lg text-gray-900 tracking-tight">

@@ -39,13 +39,10 @@ export default function Login() {
 
         <div className="flex items-center gap-4 mb-10">
           <img
-            src="/nodex-logo.png"
+            src="/logo.png"
             alt="NodeX"
-            className="w-14 animate-float"
+            className="w-60 animate-float"
           />
-          <h1 className="text-3xl font-bold text-green-700">
-            NodeX
-          </h1>
         </div>
 
         <h2 className="text-4xl font-bold text-gray-900 leading-tight">
