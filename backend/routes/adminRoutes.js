@@ -7,11 +7,12 @@ const {
   getAllComplaints,
   getAnalytics,
   getAllUsers,
-  deleteUser
+  deleteUser,
+  deleteComplaint 
 } = require('../controllers/adminController');
 
 router.use(protect, authorize('admin', 'superadmin'));
-
+router.delete('/complaints/:id', deleteComplaint);
 router.get('/complaints', getAllComplaints);
 router.get('/analytics', getAnalytics);
 router.get('/users', getAllUsers);

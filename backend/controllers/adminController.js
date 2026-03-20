@@ -2,6 +2,40 @@ const Complaint = require('../models/Complaint');
 const User = require('../models/User');
 
 
+/* =========================
+   DELETE COMPLAINT
+========================= */
+
+exports.deleteComplaint = async (req, res) => {
+  try {
+
+    const complaint = await Complaint.findByIdAndDelete(req.params.id);
+
+    if (!complaint) {
+      return res.status(404).json({
+        success: false,
+        message: 'Complaint not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Complaint deleted'
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+};
+
+
+/* =========================
+   GET ALL COMPLAINTS
+========================= */
+
 exports.getAllComplaints = async (req, res) => {
   try {
 
@@ -38,19 +72,19 @@ exports.getAllComplaints = async (req, res) => {
     });
 
   } catch (err) {
-
     res.status(500).json({
       success: false,
       message: err.message
     });
-
   }
 };
 
 
+/* =========================
+   ANALYTICS
+========================= */
 
 exports.getAnalytics = async (req, res) => {
-
   try {
 
     const totalComplaints = await Complaint.countDocuments();
@@ -64,10 +98,10 @@ exports.getAnalytics = async (req, res) => {
     const totalUsers = await User.countDocuments();
 
 
+    /* CATEGORY */
     let byCategory = [];
 
     try {
-
       byCategory = await Complaint.aggregate([
         { $group: { _id: '$category', count: { $sum: 1 } } },
         { $lookup: { from: 'categories', localField: '_id', foreignField: '_id', as: 'cat' } },
@@ -75,26 +109,25 @@ exports.getAnalytics = async (req, res) => {
         { $project: { name: { $ifNull: ['$cat.name', 'Unknown'] }, count: 1, _id: 0 } },
         { $sort: { count: -1 } },
       ]);
-
     } catch (e) {
       console.error('byCategory error:', e.message);
     }
 
 
+    /* PRIORITY */
     let byPriority = [];
 
     try {
-
       byPriority = await Complaint.aggregate([
         { $group: { _id: '$priority', count: { $sum: 1 } } },
         { $project: { name: '$_id', count: 1, _id: 0 } },
       ]);
-
     } catch (e) {
       console.error('byPriority error:', e.message);
     }
 
 
+    /* TREND */
     let monthlyTrend = [];
 
     try {
@@ -121,6 +154,7 @@ exports.getAnalytics = async (req, res) => {
     }
 
 
+    /* AVG RESOLUTION */
     let avgResolutionTime = 0;
 
     try {
@@ -165,20 +199,19 @@ exports.getAnalytics = async (req, res) => {
     });
 
   } catch (err) {
-
     res.status(500).json({
       success: false,
       message: err.message
     });
-
   }
-
 };
 
 
+/* =========================
+   GET ALL USERS
+========================= */
 
 exports.getAllUsers = async (req, res) => {
-
   try {
 
     const users = await User.find()
@@ -191,78 +224,19 @@ exports.getAllUsers = async (req, res) => {
     });
 
   } catch (err) {
-
     res.status(500).json({
       success: false,
       message: err.message
     });
-
   }
-
 };
 
 
-
-/* NEW: DELETE USER */
+/* =========================
+   DELETE USER
+========================= */
 
 exports.deleteUser = async (req, res) => {
-
-  try {
-
-    const user = await User.findById(req.params.id);
-
-    if (!user) {
-
-      return res.status(404).json({
-        success: false,
-        message: 'User not found'
-      });
-
-    }
-
-
-    /* prevent deleting superadmin */
-
-    if (user.role === 'superadmin') {
-
-      return res.status(403).json({
-        success: false,
-        message: 'Cannot delete super admin'
-      });
-
-    }
-
-
-    /* prevent deleting yourself */
-
-    if (req.user._id.toString() === user._id.toString()) {
-
-      return res.status(403).json({
-        success: false,
-        message: 'You cannot delete your own account'
-      });
-
-    }
-
-
-    await user.deleteOne();
-
-
-    res.json({
-      success: true,
-      message: 'User deleted successfully'
-    });
-
-  } catch (err) {
-
-    res.status(500).json({
-      success: false,
-      message: err.message
-    });
-
-  }
-  exports.deleteUser = async (req, res) => {
-
   try {
 
     const user = await User.findById(req.params.id);
@@ -296,14 +270,9 @@ exports.deleteUser = async (req, res) => {
     });
 
   } catch (err) {
-
     res.status(500).json({
       success: false,
       message: err.message
     });
-
   }
-
-};
-
 };
